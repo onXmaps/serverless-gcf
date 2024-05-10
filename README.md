@@ -28,3 +28,4 @@ Some Probot Apps that depend on long running processes or intervals will not wor
 
 #### Only responds to Webhooks from GitHub
 This extension is designed primarily for receiving webhooks from GitHub and responding back as a GitHub App. If you are using [HTTP Routes](https://probot.github.io/docs/http/) in your app to serve additional pages, you should take a look at [`serverless-http`](https://github.com/dougmoscrop/serverless-http), which can be used with Probot's [express server](https://github.com/probot/probot/blob/master/src/server.ts) by wrapping `probot.server`.
+

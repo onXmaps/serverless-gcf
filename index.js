@@ -25,19 +25,20 @@ module.exports.serverless = appFn => {
   return async (request, response) => {
     // 🤖 A friendly homepage if there isn't a payload
     if (request.method === 'GET' && request.path === '/probot') {
-      return response.send({
+      response.send({
         statusCode: 200,
         headers: { 'Content-Type': 'text/html' },
         body: template
       })
+      return;
     }
 
     // Otherwise let's listen handle the payload
     probot = probot || loadProbot(appFn)
 
     // Determine incoming webhook event type
-    const name = request.get('x-github-event') || request.get('X-GitHub-Event')
-    const id = request.get('x-github-delivery') || request.get('X-GitHub-Delivery')
+    const name = request.headers['x-github-event'] || request.headers['X-GitHub-Event']
+    const id = request.headers['x-github-delivery'] || request.headers['X-GitHub-Delivery']
 
     // Do the thing
     console.log(`Received event ${name}${request.body.action ? ('.' + request.body.action) : ''}`)
@@ -56,11 +57,11 @@ module.exports.serverless = appFn => {
         console.error(err)
         response.send({
           statusCode: 500,
-          body: JSON.stringify({ message: err })
+          body: JSON.stringify({ message: 'Error' })
         })
       }
     } else {
-      console.error(request)
+      console.error("Invalid request", request)
       response.sendStatus(400)
     }
   }
